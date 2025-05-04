@@ -17,6 +17,15 @@ class RegistrationController extends AbstractController
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $user = new Member();
+        $lastMember = $entityManager->getRepository(Member::class)->findOneBy([], ['memberID' => 'DESC']);
+        $lastId = $lastMember ? (int) $lastMember->getMemberID() : 1000;
+
+        $newMemberID = $lastId + 1;
+
+        $user->setMemberID($newMemberID);
+        $user->setMembershipStartDate(new \DateTime());
+        $user->setMembershipEndDate((new \DateTime())->modify('+1 year'));
+        $user->setMembershipStatus('actif');
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -32,7 +41,7 @@ class RegistrationController extends AbstractController
 
             // do anything else you need here, like send an email
 
-            return $this->redirectToRoute('app_event_show');
+
         }
 
         return $this->render('registration/register.html.twig', [

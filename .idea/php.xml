@@ -272,6 +272,7 @@
       <path value="$PROJECT_DIR$/MyProjectSF/vendor/phpdocumentor/type-resolver" />
       <path value="$PROJECT_DIR$/MyProjectSF/vendor/phpdocumentor/reflection-common" />
       <path value="$PROJECT_DIR$/MyProjectSF/vendor/egulias/email-validator" />
+      <path value="$PROJECT_DIR$/vendor/symfonycasts/verify-email-bundle" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2" />

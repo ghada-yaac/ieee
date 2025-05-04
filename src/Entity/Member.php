@@ -43,9 +43,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $mdp = null;
-
     #[ORM\Column]
     private ?int $numTel = null;
 
@@ -57,9 +54,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $membershipEndDate = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $role = null;
 
     public function getId(): ?int
     {
@@ -172,18 +166,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMdp(): ?string
-    {
-        return $this->mdp;
-    }
-
-    public function setMdp(string $mdp): static
-    {
-        $this->mdp = $mdp;
-
-        return $this;
-    }
-
     public function getNumTel(): ?int
     {
         return $this->numTel;
@@ -228,18 +210,6 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     public function setMembershipEndDate(\DateTimeInterface $membershipEndDate): static
     {
         $this->membershipEndDate = $membershipEndDate;
-
-        return $this;
-    }
-
-    public function getRole(): ?string
-    {
-        return $this->role;
-    }
-
-    public function setRole(?string $role): static
-    {
-        $this->role = $role;
 
         return $this;
     }
