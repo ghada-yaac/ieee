@@ -1,0 +1,250 @@
+{% include 'header.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        .pending-container {
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .pending-icon {
+            width: 120px;
+            height: 120px;
+            background-color: #f0f7ff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+        }
+
+        .pending-icon i {
+            font-size: 60px;
+            color: #0056b3;
+        }
+
+        .pending-title {
+            font-size: 28px;
+            color: #0056b3;
+            margin-bottom: 20px;
+        }
+
+        .pending-message {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .pending-steps {
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .pending-steps h3 {
+            font-size: 18px;
+            color: #0056b3;
+            margin-bottom: 15px;
+        }
+
+        .step-item {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            background-color: #0056b3;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex-grow: 1;
+        }
+
+        .step-content h4 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .step-content p {
+            font-size: 14px;
+            color: #666;
+            margin: 0;
+        }
+
+        .pending-status {
+            margin-bottom: 30px;
+        }
+
+        .status-bar {
+            height: 6px;
+            background-color: #e0e0e0;
+            border-radius: 3px;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .status-progress {
+            height: 100%;
+            width: 33%;
+            background-color: #0056b3;
+            border-radius: 3px;
+        }
+
+        .status-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .pending-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-primary, .btn-outline {
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: #0056b3;
+            color: white;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #004494;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            color: #0056b3;
+            border: 1px solid #0056b3;
+        }
+
+        .btn-outline:hover {
+            background-color: #f0f7ff;
+        }
+
+        .contact-info {
+            margin-top: 40px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .contact-info a {
+            color: #0056b3;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .pending-container {
+                padding: 20px;
+                margin: 30px 15px;
+            }
+
+            .pending-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .btn-primary, .btn-outline {
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="pending-container">
+        <div class="pending-icon">
+            <i class="fas fa-user-clock"></i>
+        </div>
+
+        <h1 class="pending-title">Votre compte est en attente d'approbation</h1>
+
+        <p class="pending-message">
+            Merci de vous être inscrit au club IEEE ! Votre demande d'adhésion a été reçue et est actuellement en cours d'examen par le président du club.
+            Nous vous informerons par e-mail dès que votre compte sera approuvé.
+        </p>
+
+        <div class="pending-status">
+            <div class="status-bar">
+                <div class="status-progress"></div>
+            </div>
+            <div class="status-text">
+                <span>Inscription soumise</span>
+                <span>En cours d'examen</span>
+                <span>Approuvé</span>
+            </div>
+        </div>
+
+        <div class="pending-steps">
+            <h3>Prochaines étapes</h3>
+
+            <div class="step-item">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h4>Vérification de votre demande</h4>
+                    <p>Le président du club examine votre demande d'adhésion.</p>
+                </div>
+            </div>
+
+            <div class="step-item">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h4>Accès complet</h4>
+                    <p>Après approbation, vous aurez accès à toutes les fonctionnalités et ressources du club.</p>
+                </div>
+            </div>
+        </div>
+
+        <p class="pending-message">
+            Le processus d'approbation prend généralement entre 24 et 48 heures. Pendant ce temps, vous pouvez explorer notre site en tant qu'invité.
+        </p>
+
+        <div class="pending-actions">
+            <a href="{{ path('app_home') }}" class="btn-outline">Retour à l'accueil</a>
+        </div>
+
+        <div class="contact-info">
+            <p>Des questions ? Contactez-nous à <a href="mailto:ieee.club@example.com">ieee.club@example.com</a></p>
+        </div>
+    </div>
+{% endblock %}
+{% include 'footer.html.twig' %}

@@ -25,7 +25,7 @@ class RegistrationController extends AbstractController
         $user->setMemberID($newMemberID);
         $user->setMembershipStartDate(new \DateTime());
         $user->setMembershipEndDate((new \DateTime())->modify('+1 year'));
-        $user->setMembershipStatus('actif');
+        $user->setMembershipStatus('pending');
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
@@ -38,7 +38,7 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
-
+            return $this->redirectToRoute('app_login');
             // do anything else you need here, like send an email
 
 

@@ -1,0 +1,201 @@
+{% block title %}<title>Default Title</title>{% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    {% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+    <section class="hero">
+        <div class="container">
+            <h1>Welcome to IEEE ISET-RADES SB</h1>
+            <p>Advancing Technology for Humanity</p>
+        </div>
+    </section>
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="#">Home</a> > Welcome to IEEE
+        </div>
+    </div>
+
+    <main>
+        <div class="container">
+            <!-- Section Profil Membre -->
+            <section class="profile-section">
+                <div class="welcome-message">
+                    <h3>Bonjour, !</h3>
+                    <p>Bienvenue dans votre espace membre. Ici, vous pouvez consulter votre profil, voir les événements à venir et accéder aux ressources exclusives du club IEEE ISET-RADES SB.</p>
+                </div>
+
+                <div class="profile-header">
+                    <div class="profile-avatar">
+                            <i class="fas fa-user"></i>
+
+                    </div>
+
+                    <div class="profile-info">
+{#                        <h2>{{ app.user.firstName }} {{ app.user.lastName }}</h2>#}
+{#                        <p>{{ app.user.email }}</p>#}
+                        <span class="member-badge">Membre IEEE</span>
+
+                        <div class="profile-actions">
+                            <a href="#" class="profile-btn profile-btn-primary">
+                                <i class="fas fa-edit"></i> Modifier mon profil
+                            </a>
+                            <a href="#" class="profile-btn profile-btn-outline">
+                                <i class="fas fa-calendar-alt"></i> Mes événements
+                            </a>
+                            <a href="#" class="profile-btn profile-btn-outline">
+                                <i class="fas fa-tasks"></i> Mes tâches
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-calendar-check"></i>
+{#                        <h3>{{ app.user.eventsAttended|default(0) }}</h3>#}
+                        <p>Événements participés</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tasks"></i>
+{#                        <h3>{{ app.user.tasksCompleted|default(0) }}</h3>#}
+                        <p>Tâches complétées</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-certificate"></i>
+{#                        <h3>{{ app.user.points|default(0) }}</h3>#}
+                        <p>Points gagnés</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-user-friends"></i>
+{#                        <h3>{{ membershipDuration|default('Nouveau') }}</h3>#}
+                        <p>Durée d'adhésion</p>
+                    </div>
+                </div>
+
+                <div class="profile-details">
+                    <div class="detail-group">
+                        <label>Nom complet</label>
+{#                        <p>{{ app.user.firstName }} {{ app.user.lastName }}</p>#}
+                    </div>
+
+                    <div class="detail-group">
+                        <label>Email</label>
+{#                        <p>{{ app.user.email }}</p>#}
+                    </div>
+
+                    <div class="detail-group">
+                        <label>Téléphone</label>
+{#                        <p>{{ app.user.phone|default('Non renseigné') }}</p>#}
+                    </div>
+
+                    <div class="detail-group">
+                        <label>Département</label>
+{#                        <p>{{ app.user.department|default('Non renseigné') }}</p>#}
+                    </div>
+
+                    <div class="detail-group">
+                        <label>Date d'inscription</label>
+{#                        <p>{{ app.user.createdAt|date('d/m/Y') }}</p>#}
+                    </div>
+
+                    <div class="detail-group">
+                        <label>Statut</label>
+                        <!--<p>{{ app.user.status|default('Actif') }}</p>-->
+                    </div>
+                </div>
+            </section>
+
+            <section class="main-content">
+                <h2>Where Innovation Meets Excellence in Engineering</h2>
+                <p>Are you ready to be at the forefront of technological innovation, standing at the intersection of engineering, computing, and technology? Joining IEEE is not just a membership; it's an invitation to be part of a global community that drives innovation and reshapes the landscape of technology.</p>
+
+                <div class="cta-buttons">
+                    <a href="#" class="cta-button">Participer aux événements</a>
+                    <a href="#" class="cta-button secondary">Ressources exclusives</a>
+                </div>
+            </section>
+
+            <section class="featured-events">
+                <h2>Événements à venir</h2>
+                <div class="events-grid">
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">15</span>
+                            <span class="month">MAR</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>Technical Workshop</h3>
+                            <p>Introduction to Machine Learning with Python</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Engineering Building, Room 305</p>
+                            <a href="#" class="event-link">S'inscrire</a>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">22</span>
+                            <span class="month">MAR</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>Guest Lecture</h3>
+                            <p>Future of Renewable Energy Technologies</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Science Center Auditorium</p>
+                            <a href="#" class="event-link">S'inscrire</a>
+                        </div>
+                    </div>
+                    <div class="event-card">
+                        <div class="event-date">
+                            <span class="day">05</span>
+                            <span class="month">APR</span>
+                        </div>
+                        <div class="event-details">
+                            <h3>Networking Event</h3>
+                            <p>Connect with Industry Professionals</p>
+                            <p class="event-location"><i class="fas fa-map-marker-alt"></i> Student Union, Grand Hall</p>
+                            <a href="#" class="event-link">S'inscrire</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="view-all">
+                    <a href="event.html">Voir tous les événements <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </section>
+
+            <section class="benefits">
+                <h2>Avantages de votre adhésion IEEE</h2>
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Réseautage</h3>
+                        <p>Connectez-vous avec des professionnels, des universitaires et des étudiants dans votre domaine</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3>Innovation</h3>
+                        <p>Restez à la pointe des avancées technologiques</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-book"></i>
+                        <h3>Ressources</h3>
+                        <p>Accès aux revues, publications et matériels éducatifs</p>
+                    </div>
+                    <div class="benefit-card">
+                        <i class="fas fa-certificate"></i>
+                        <h3>Reconnaissance</h3>
+                        <p>Opportunités de prix et de reconnaissance professionnelle</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+{% endblock %}
+{% include 'footer.html.twig' %}
+
