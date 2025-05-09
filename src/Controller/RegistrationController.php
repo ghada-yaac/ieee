@@ -21,7 +21,7 @@ class RegistrationController extends AbstractController
         $lastId = $lastMember ? (int) $lastMember->getMemberID() : 1000;
 
         $newMemberID = $lastId + 1;
-
+        $user->setPoints(0);
         $user->setMemberID($newMemberID);
         $user->setMembershipStartDate(new \DateTime());
         $user->setMembershipEndDate((new \DateTime())->modify('+1 year'));

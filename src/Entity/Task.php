@@ -32,6 +32,9 @@ class Task
     #[ORM\Column]
     private ?int $nbrPersonne = null;
 
+    #[ORM\ManyToOne(inversedBy: 'tasks')]
+    private ?member $relation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -105,6 +108,18 @@ class Task
     public function setNbrPersonne(int $nbrPersonne): static
     {
         $this->nbrPersonne = $nbrPersonne;
+
+        return $this;
+    }
+
+    public function getRelation(): ?member
+    {
+        return $this->relation;
+    }
+
+    public function setRelation(?member $relation): static
+    {
+        $this->relation = $relation;
 
         return $this;
     }
