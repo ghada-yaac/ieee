@@ -1,0 +1,268 @@
+{% block title %}
+    <title>Register for {{ event.nom }} - IEEE ISET-RADES SB</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/event.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/register.css') }}">
+    <style>
+        :root {
+            --ieee-blue: #006699;
+            --ieee-dark-blue: #00557A;
+            --ieee-light-blue: #E6F3F8;
+        }
+
+        .breadcrumb-section {
+            background-color: #f8f9fa;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .registration-section {
+            padding: 60px 0;
+            background-color: #f8f9fa;
+        }
+
+        .event-card {
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background-color: var(--ieee-blue);
+            color: white;
+            padding: 20px;
+            border-bottom: none;
+        }
+
+        .event-title {
+            font-weight: 700;
+            margin-bottom: 0;
+        }
+
+        .event-meta {
+            background-color: var(--ieee-light-blue);
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .event-meta i {
+            color: var(--ieee-blue);
+            width: 20px;
+            text-align: center;
+            margin-right: 8px;
+        }
+
+        .form-container {
+            padding: 30px;
+            background-color: white;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-control:read-only {
+            background-color: #f8f9fa;
+            border-color: #e9ecef;
+        }
+
+        .btn-ieee {
+            background-color: var(--ieee-blue);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-weight: 600;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-ieee:hover {
+            background-color: var(--ieee-dark-blue);
+            color: white;
+        }
+
+        .registration-full {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .registration-full i {
+            font-size: 3rem;
+            color: #dc3545;
+            margin-bottom: 20px;
+        }
+
+        .terms-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .terms-group input {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+    </style>
+{% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+    <!-- Breadcrumb -->
+    <div class="breadcrumb-section">
+        <div class="container">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a href="{{ path('app_home_member') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_home_event') }}">Events</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Register for {{ event.nom }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Registration Section -->
+    <section class="registration-section">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="event-card">
+                        <!-- Card Header -->
+                        <div class="card-header">
+                            <h1 class="event-title">Register for {{ event.nom }}</h1>
+                        </div>
+
+                        <!-- Event Meta Information -->
+                        <div class="event-meta">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <p class="mb-2"><i class="bi bi-calendar-event"></i> {{ event.date|date('F j, Y') }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-2"><i class="bi bi-geo-alt"></i> {{ event.location }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p class="mb-2"><i class="bi bi-people"></i> {{ event.nbrPersonne }} spots available</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Registration Form -->
+                        <div class="form-container">
+                            {% if event.nbrPersonne > 0 %}
+                                <form id="registration-form" action="{{ path('app_event_register', {'id': event.id}) }}" method="post" class="needs-validation" novalidate>
+                                    <div class="mb-3">
+                                        <label for="full-name" class="form-label">Full Name</label>
+                                        <input type="text" class="form-control" id="full-name" name="full_name" value="{{ app.user.prenom }} {{ app.user.nom }}" required readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" name="email" value="{{ app.user.email }}" required readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="student-id" class="form-label">Member ID</label>
+                                        <input type="text" class="form-control" id="student-id" name="student_id" value="{{ app.user.memberID }}" required readonly>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="special-requirements" class="form-label">Comments (Optional)</label>
+                                        <textarea class="form-control" id="special-requirements" name="special_requirements" rows="3" placeholder="Please let us know if you have any comment"></textarea>
+                                    </div>
+
+                                    <div class="mb-4 terms-group">
+                                        <input class="form-check-input" type="checkbox" id="terms" name="terms" required>
+                                        <label class="form-check-label" for="terms">
+                                            I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a>
+                                        </label>
+                                        <div class="invalid-feedback">
+                                            You must agree to the terms and conditions.
+                                        </div>
+                                    </div>
+
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-ieee">Complete Registration</button>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <div class="registration-full">
+                                    <i class="bi bi-exclamation-circle"></i>
+                                    <h3 class="mt-3 mb-3">This event is fully booked</h3>
+                                    <p class="text-muted mb-4">All available spots have been taken. Please check back later for cancellations or similar events.</p>
+                                    <a href="{{ path('app_home_event') }}" class="btn btn-outline-primary">Browse Other Events</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Terms Modal -->
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>By registering for this event, you agree to the following terms and conditions:</p>
+                    <ul>
+                        <li>Your registration is confirmed only after submission of this form.</li>
+                        <li>If you cannot attend, please cancel your registration at least 48 hours before the event.</li>
+                        <li>IEEE ISET-RADES SB reserves the right to use photographs taken during the event for promotional purposes.</li>
+                        <li>Personal information collected will be used only for event management purposes.</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Form Validation Script -->
+    <script>
+        // Example starter JavaScript for disabling form submissions if there are invalid fields
+        (function () {
+            'use strict'
+
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.querySelectorAll('.needs-validation')
+
+            // Loop over them and prevent submission
+            Array.prototype.slice.call(forms)
+                .forEach(function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
+                            event.preventDefault()
+                            event.stopPropagation()
+                        }
+
+                        form.classList.add('was-validated')
+                    }, false)
+                })
+        })()
+    </script>
+{% endblock %}
+
+{% include 'footer.html.twig' %}

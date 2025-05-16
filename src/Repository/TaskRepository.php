@@ -15,6 +15,15 @@ class TaskRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Task::class);
     }
+    public function findByEventId(int $eventId): array
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.event = :eventId')
+            ->setParameter('eventId', $eventId)
+            ->getQuery()
+            ->getResult();
+    }
+
 
     //    /**
     //     * @return Task[] Returns an array of Task objects

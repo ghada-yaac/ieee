@@ -33,7 +33,7 @@ class Task
     private ?int $nbrPersonne = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
-    private ?member $relation = null;
+    private ?Member $relation = null;
 
     public function getId(): ?int
     {
@@ -112,14 +112,29 @@ class Task
         return $this;
     }
 
-    public function getRelation(): ?member
+    public function getRelation(): ?Member
     {
         return $this->relation;
     }
 
-    public function setRelation(?member $relation): static
+    public function setRelation(?Member $relation): static
     {
         $this->relation = $relation;
+
+        return $this;
+    }
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Event $event = null;
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): static
+    {
+        $this->event = $event;
 
         return $this;
     }

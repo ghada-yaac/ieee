@@ -1,0 +1,246 @@
+{% block title %}
+        <title>Tasks for {{ event.nom }} - IEEE ISET-RADES SB</title>
+{% endblock %}
+
+{% block stylesheets %}
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+        <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/task.css') }}">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+{% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+        <!-- Hero Section -->
+        <div class="tasks-hero">
+                <div class="container">
+                        <h1>Tasks for {{ event.nom }}</h1>
+                        <p>Track and manage all tasks related to this event</p>
+                </div>
+        </div>
+
+        <!-- Breadcrumb -->
+        <div class="breadcrumb">
+                <div class="container">
+                        <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb mb-0">
+                                        <li class="breadcrumb-item"><a href="{{ path('app_home_member') }}">Home</a></li>
+                                        <li class="breadcrumb-item"><a href="{{ path('app_home_event') }}">Events</a></li>
+                                        <li class="breadcrumb-item"><a href="#">{{ event.nom }}</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Tasks</li>
+                                </ol>
+                        </nav>
+                </div>
+        </div>
+
+        <!-- Tasks Section -->
+        <section class="tasks-section">
+                <div class="container">
+                        <!-- Tasks Header -->
+                        <div class="tasks-header">
+                                <h2>Event Tasks</h2>
+                                <div class="tasks-actions">
+                                        <div class="tasks-count">
+                                                Showing <span>{{ tasks|length }}</span> tasks
+                                        </div>
+                                        <div class="tasks-sort">
+                                                <label for="sort-tasks">Sort by:</label>
+                                                <select id="sort-tasks" class="form-select form-select-sm">
+                                                        <option value="deadline-asc">Deadline (Nearest first)</option>
+                                                        <option value="deadline-desc">Deadline (Furthest first)</option>
+                                                        <option value="status">Status</option>
+                                                        <option value="name-asc">Name (A-Z)</option>
+                                                </select>
+                                        </div>
+                                </div>
+                        </div>
+
+                        <!-- Filter Buttons -->
+                        <div class="filter-buttons">
+                                <button class="filter-btn all active" data-filter="all">All Tasks</button>
+                                <button class="filter-btn pending" data-filter="pending">Pending</button>
+                                <button class="filter-btn in-progress" data-filter="in-progress">In Progress</button>
+                                <button class="filter-btn completed" data-filter="completed">Completed</button>
+                                <button class="filter-btn cancelled" data-filter="cancelled">Cancelled</button>
+                        </div>
+
+                        <!-- Tasks Grid -->
+                        {% if tasks|length > 0 %}
+                                <div class="tasks-grid" id="tasks-list">
+                                        {% for task in tasks %}
+                                                {% set status_class = 'pending' %}
+                                                {% set status_icon = 'bi-hourglass' %}
+                                                {% set status_text = 'Pending' %}
+
+                                                {% if task.statut == 'Completed' %}
+                                                        {% set status_class = 'completed' %}
+                                                        {% set status_icon = 'bi-check-circle-fill' %}
+                                                        {% set status_text = 'Completed' %}
+                                                {% elseif task.statut == 'In Progress' %}
+                                                        {% set status_class = 'in-progress' %}
+                                                        {% set status_icon = 'bi-play-circle-fill' %}
+                                                        {% set status_text = 'In Progress' %}
+                                                {% elseif task.statut == 'Cancelled' %}
+                                                        {% set status_class = 'cancelled' %}
+                                                        {% set status_icon = 'bi-x-circle-fill' %}
+                                                        {% set status_text = 'Cancelled' %}
+                                                {% endif %}
+
+                                                {% set days_remaining = date(task.deadline).diff(date('now')).days %}
+                                                {% if days_remaining < 0 and task.statut != 'Completed' and task.statut != 'Cancelled' %}
+                                                        {% set status_class = 'overdue' %}
+                                                        {% set status_icon = 'bi-exclamation-circle-fill' %}
+                                                        {% set status_text = 'Overdue' %}
+                                                {% endif %}
+
+                                                <div class="task-item" data-status="{{ task.statut|lower|replace({' ': '-'}) }}">
+                                                        <div class="task-card">
+                                                                <div class="task-header">
+                                                                        <h3 class="task-title">{{ task.nom }}</h3>
+                                                                        <span class="task-status {{ status_class }}">
+                                        <i class="bi {{ status_icon }}"></i> {{ status_text }}
+                                    </span>
+                                                                </div>
+                                                                <div class="task-content">
+                                                                        <div class="task-meta">
+                                        <span>
+                                            <i class="bi bi-calendar-event"></i>
+                                            Deadline: {{ task.deadline|date('d M Y') }}
+                                        </span>
+                                                                                {% if task.assignedTo is defined %}
+                                                                                        <span>
+                                            <i class="bi bi-person"></i>
+                                            {{ task.assignedTo }}
+                                        </span>
+                                                                                {% endif %}
+                                                                        </div>
+
+                                                                        {% if task.description is defined %}
+                                                                                <div class="task-description">
+                                                                                        {{ task.description }}
+                                                                                </div>
+                                                                        {% else %}
+                                                                                <div class="task-description">
+                                                                                        Task details not available.
+                                                                                </div>
+                                                                        {% endif %}
+
+                                                                        <div class="task-footer">
+                                                                                <div class="task-deadline-indicator">
+                                                                                        {% if task.statut != 'Completed' and task.statut != 'Cancelled' %}
+                                                                                                {% if days_remaining < 0 %}
+                                                                                                        <span class="deadline-badge overdue">
+                                                        {{ days_remaining|abs }} day{% if days_remaining != -1 %}s{% endif %} overdue
+                                                    </span>
+                                                                                                {% elseif days_remaining <= 3 %}
+                                                                                                        <span class="deadline-badge near">
+                                                        {{ days_remaining }} day{% if days_remaining != 1 %}s{% endif %} left
+                                                    </span>
+                                                                                                {% else %}
+                                                                                                        <span class="deadline-badge upcoming">
+                                                        {{ days_remaining }} days left
+                                                    </span>
+                                                                                                {% endif %}
+                                                                                        {% endif %}
+                                                                                </div>
+                                                                                <a href="#" class="task-action-btn">
+                                                                                        {% if task.statut == 'Completed' %}
+                                                                                                View Details
+                                                                                        {% elseif task.statut == 'Cancelled' %}
+                                                                                                View Details
+                                                                                        {% else %}
+                                                                                                Update Status
+                                                                                        {% endif %}
+                                                                                </a>
+                                                                        </div>
+                                                                </div>
+                                                        </div>
+                                                </div>
+                                        {% endfor %}
+                                </div>
+                        {% else %}
+                                <div class="no-tasks">
+                                        <i class="bi bi-clipboard-x"></i>
+                                        <h3>No Tasks Found</h3>
+                                        <p>There are no tasks assigned for this event yet. Create a new task to get started with event planning.</p>
+                                        <a href="#" class="btn">Create a New Task</a>
+                                </div>
+                        {% endif %}
+                </div>
+        </section>
+
+        <!-- Bootstrap JS Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Filter and Sort Script -->
+        <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                        // Filter functionality
+                        const filterButtons = document.querySelectorAll('.filter-btn');
+                        const taskItems = document.querySelectorAll('.task-item');
+
+                        filterButtons.forEach(button => {
+                                button.addEventListener('click', function() {
+                                        // Remove active class from all buttons
+                                        filterButtons.forEach(btn => btn.classList.remove('active'));
+
+                                        // Add active class to clicked button
+                                        this.classList.add('active');
+
+                                        const filter = this.getAttribute('data-filter');
+
+                                        // Show/hide tasks based on filter
+                                        taskItems.forEach(item => {
+                                                if (filter === 'all' || item.getAttribute('data-status') === filter) {
+                                                        item.style.display = 'block';
+                                                } else {
+                                                        item.style.display = 'none';
+                                                }
+                                        });
+                                });
+                        });
+
+                        // Sort functionality
+                        const sortSelect = document.getElementById('sort-tasks');
+                        const tasksList = document.getElementById('tasks-list');
+
+                        sortSelect.addEventListener('change', function() {
+                                const sortValue = this.value;
+                                const tasks = Array.from(taskItems);
+
+                                tasks.sort((a, b) => {
+                                        if (sortValue === 'deadline-asc') {
+                                                const dateA = a.querySelector('.task-meta span:first-child').textContent.trim();
+                                                const dateB = b.querySelector('.task-meta span:first-child').textContent.trim();
+                                                return new Date(dateA) - new Date(dateB);
+                                        } else if (sortValue === 'deadline-desc') {
+                                                const dateA = a.querySelector('.task-meta span:first-child').textContent.trim();
+                                                const dateB = b.querySelector('.task-meta span:first-child').textContent.trim();
+                                                return new Date(dateB) - new Date(dateA);
+                                        } else if (sortValue === 'status') {
+                                                const statusA = a.getAttribute('data-status');
+                                                const statusB = b.getAttribute('data-status');
+                                                return statusA.localeCompare(statusB);
+                                        } else if (sortValue === 'name-asc') {
+                                                const nameA = a.querySelector('.task-title').textContent.trim();
+                                                const nameB = b.querySelector('.task-title').textContent.trim();
+                                                return nameA.localeCompare(nameB);
+                                        }
+                                        return 0;
+                                });
+
+                                // Reorder DOM elements
+                                tasks.forEach(task => {
+                                        tasksList.appendChild(task);
+                                });
+                        });
+                });
+        </script>
+{% endblock %}
+
+{% include 'footer.html.twig' %}

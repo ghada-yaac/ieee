@@ -1,0 +1,211 @@
+{% block title %}
+    <title>Upcoming Events - IEEE ISET-RADES SB</title>
+{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/event.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+
+    <div class="breadcrumb">
+        <div class="container">
+            <a href="{{ path('app_home_member') }}">Home</a> > <span>Upcoming Events</span>
+        </div>
+    </div>
+
+    <section class="events-hero">
+        <div class="container">
+            <h1>Upcoming Events</h1>
+            <p>Discover workshops, lectures, networking opportunities, and more</p>
+            <div class="events-search-bar">
+                <input type="text" placeholder="Search for events...">
+                <button><i class="fas fa-search"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <section class="events-section">
+        <div class="container">
+            <div class="events-layout">
+                <!-- Sidebar -->
+                <div class="events-sidebar">
+                    <div class="sidebar-widget">
+                        <h3>Search Events</h3>
+                        <div class="search-box">
+                            <input type="text" placeholder="Search events...">
+                            <button><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Filter by Category</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                                <span>All Categories</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Workshops</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Lectures</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Networking</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Competitions</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Conferences</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Filter by Date</h3>
+                        <div class="date-filter">
+                            <div class="date-range">
+                                <label for="start-date">From</label>
+                                <input type="date" id="start-date">
+                            </div>
+                            <div class="date-range">
+                                <label for="end-date">To</label>
+                                <input type="date" id="end-date">
+                            </div>
+                            <button class="apply-filter">Apply Filter</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-widget">
+                        <h3>Location</h3>
+                        <div class="filter-options">
+                            <label class="filter-option">
+                                <input type="checkbox" checked>
+                                <span class="checkmark"></span>
+                                <span>All Locations</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>ISET RADES</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Virtual</span>
+                            </label>
+                            <label class="filter-option">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                                <span>Other</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="events-content">
+                    <div class="events-header">
+                        <h2>Liste des Événements</h2>
+                        <div class="events-actions">
+                            <div class="events-count">
+                                Showing <span>{{ events|length }}</span> events
+                            </div>
+                            <div class="events-sort">
+                                <label for="sort-events">Sort by:</label>
+                                <select id="sort-events">
+                                    <option value="date-asc">Date (Soonest First)</option>
+                                    <option value="date-desc">Date (Latest First)</option>
+                                    <option value="name-asc">Name (A-Z)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="events-grid">
+                        {% for event in events %}
+                            <div class="event-card">
+                                <div class="event-item" data-category="{{ event.categorie|lower }}" data-date="{{ event.date|date('Y-m-d') }}">
+                                <div class="event-image">
+{#                                    <img src="{{ asset('images/events/default.jpg') }}" alt="{{ event.nom }}">#}
+                                    <div class="event-category {{ event.categorie|lower|replace({' ': '-'}) }}">{{ event.categorie }}</div>
+                                    <div class="event-date-badge">
+                                        <span class="month">{{ event.date|date('M')|upper }}</span>
+                                        <span class="day">{{ event.date|date('d') }}</span>
+                                    </div>
+                                </div>
+                                <div class="event-content">
+                                    <h3>{{ event.nom }}</h3>
+                                    <div class="event-meta">
+                                        <span><i class="fas fa-clock"></i> 15:30 - 17:00</span>
+                                        <span><i class="fas fa-map-marker-alt"></i> {{ event.location }}</span>
+                                        <span><i class="fas fa-users"></i> {{ event.nbrPersonne }} places</span>
+                                    </div>
+                                    <div class="event-description">
+                                        <p>{{ event.description|default('Join us for this exciting event!')|length > 120 ? event.description|slice(0, 120) ~ '...' : event.description|default('Join us for this exciting event!') }}</p>
+                                    </div>
+                                   <div class="event-footer">
+                                        <a href="{{ path('app_event_tasks', {'id': event.id}) }}" class="event-details-link">Participate in organizing</a>
+                                      <a href="{{ path('app_event_register', {'id': event.id}) }}" class="event-register-btn">Register Now</a>
+                                  </div>
+                                </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="no-events">
+                                <i class="fas fa-calendar-times"></i>
+                                <h3>No events found</h3>
+                                <p>There are currently no upcoming events. Please check back later or adjust your filters.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {% if events|length > 0 %}
+                        <div class="pagination">
+                            <a href="#" class="prev-page"><i class="fas fa-chevron-left"></i></a>
+                            <a href="#" class="active">1</a>
+                            <a href="#">2</a>
+                            <a href="#">3</a>
+                            <span class="dots">...</span>
+                            <a href="#">5</a>
+                            <a href="#" class="next-page"><i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="newsletter-section">
+        <div class="container">
+            <div class="newsletter-content">
+                <h2>Stay Updated on Future Events</h2>
+                <p>Subscribe to our newsletter to receive notifications about upcoming events, workshops, and opportunities.</p>
+                <form class="newsletter-form">
+                    <input type="email" placeholder="Your Email Address" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <script src="{{ asset('js/event.js') }}"></script>
+{% endblock %}
+{% include 'footer.html.twig' %}
