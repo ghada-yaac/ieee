@@ -41,9 +41,7 @@
                     <div class="profile-info">
                         <h2>{{ app.user.nom }} {{ app.user.prenom }}</h2>
                         <p>{{ app.user.email }}</p>
-                        <p>member ID: {{ app.user.memberID }}</p>
-                        <span class="member-badge">Membre IEEE</span>
-
+                        <strong class="member-badge">IEEE member ID:</strong><strong> {{ app.user.memberID }}</strong>
                         <div class="profile-actions">
                             <a href="{{ path('app_profil_edit') }}" class="profile-btn profile-btn-primary">
                                 <i class="fas fa-edit"></i> Modifier mon profil
@@ -51,7 +49,7 @@
                             <a href="#" class="profile-btn profile-btn-outline">
                                 <i class="fas fa-calendar-alt"></i> Mes événements
                             </a>
-                            <a href="#" class="profile-btn profile-btn-outline">
+                            <a href="{{ path('app_home_my_tasks') }}" class="profile-btn profile-btn-outline">
                                 <i class="fas fa-tasks"></i> Mes tâches
                             </a>
                         </div>
@@ -66,7 +64,7 @@
                     </div>
                     <div class="stat-card">
                         <i class="fas fa-tasks"></i>
-{#                        <h3>{{ app.user.tasksCompleted|default(0) }}</h3>#}
+                        <h3>{{ taskCount }}</h3>
                         <p>Tâches complétées</p>
                     </div>
                     <div class="stat-card">

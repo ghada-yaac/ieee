@@ -30,7 +30,8 @@ class Task
     private ?\DateTimeInterface $deadline = null;
 
     #[ORM\Column]
-    private ?int $nbrPersonne = null;
+    private ?int $point = null;
+
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
     private ?Member $relation = null;
@@ -100,17 +101,18 @@ class Task
         return $this;
     }
 
-    public function getNbrPersonne(): ?int
+    public function getPoint(): ?int
     {
-        return $this->nbrPersonne;
+        return $this->point;
     }
 
-    public function setNbrPersonne(int $nbrPersonne): static
+    public function setPoint(int $point): static
     {
-        $this->nbrPersonne = $nbrPersonne;
+        $this->point = $point;
 
         return $this;
     }
+
 
     public function getRelation(): ?Member
     {

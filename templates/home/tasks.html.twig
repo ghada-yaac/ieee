@@ -3,181 +3,170 @@
 {% endblock %}
 
 {% block stylesheets %}
-        <!-- Bootstrap CSS -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
         <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
         <link rel="stylesheet" href="{{ asset('css/task.css') }}">
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-
+        <style>
+                .card {
+                        border: 1px solid #dee2e6;
+                        margin-bottom: 20px;
+                }
+                .card-header {
+                        background-color: #f8f9fa;
+                        border-bottom: 1px solid #dee2e6;
+                        padding: 10px 15px;
+                }
+                .card-title {
+                        margin-bottom: 0;
+                        font-weight: bold;
+                }
+                .card-body {
+                        padding: 0;
+                }
+                .task-info {
+                        display: table;
+                        width: 100%;
+                }
+                .task-row {
+                        display: table-row;
+                }
+                .task-label {
+                        display: table-cell;
+                        padding: 8px 15px;
+                        border-right: 1px solid #dee2e6;
+                        border-bottom: 1px solid #dee2e6;
+                        width: 50%;
+                        vertical-align: middle;
+                        color: #6c757d;
+                }
+                .task-value {
+                        display: table-cell;
+                        padding: 8px 15px;
+                        border-bottom: 1px solid #dee2e6;
+                        width: 50%;
+                        vertical-align: middle;
+                        font-weight: 500;
+                }
+                .deadline-value {
+                        color: #dc3545;
+                }
+                .card-footer {
+                        background-color: #fff;
+                        border-top: 1px solid #dee2e6;
+                        padding: 10px 15px;
+                }
+                .filter-buttons {
+                        margin-bottom: 20px;
+                }
+                .filter-btn {
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                }
+        </style>
 {% endblock %}
 
 {% include 'header.html.twig' %}
 
 {% block body %}
-        <!-- Hero Section -->
-        <div class="tasks-hero">
-                <div class="container">
-                        <h1>Tasks for {{ event.nom }}</h1>
-                        <p>Track and manage all tasks related to this event</p>
-                </div>
-        </div>
+        <div class="container mt-4">
+                <h1>Tasks for {{ event.nom }}</h1>
 
-        <!-- Breadcrumb -->
-        <div class="breadcrumb">
-                <div class="container">
-                        <nav aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">
-                                        <li class="breadcrumb-item"><a href="{{ path('app_home_member') }}">Home</a></li>
-                                        <li class="breadcrumb-item"><a href="{{ path('app_home_event') }}">Events</a></li>
-                                        <li class="breadcrumb-item"><a href="#">{{ event.nom }}</a></li>
-                                        <li class="breadcrumb-item active" aria-current="page">Tasks</li>
-                                </ol>
-                        </nav>
-                </div>
-        </div>
+                <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                                <li class="breadcrumb-item"><a href="{{ path('app_home_member') }}">Home</a></li>
+                                <li class="breadcrumb-item"><a href="{{ path('app_home_event') }}">Events</a></li>
+                                <li class="breadcrumb-item"><a href="#">{{ event.nom }}</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Tasks</li>
+                        </ol>
+                </nav>
 
-        <!-- Tasks Section -->
-        <section class="tasks-section">
-                <div class="container">
-                        <!-- Tasks Header -->
-                        <div class="tasks-header">
-                                <h2>Event Tasks</h2>
-                                <div class="tasks-actions">
-                                        <div class="tasks-count">
-                                                Showing <span>{{ tasks|length }}</span> tasks
-                                        </div>
-                                        <div class="tasks-sort">
-                                                <label for="sort-tasks">Sort by:</label>
-                                                <select id="sort-tasks" class="form-select form-select-sm">
-                                                        <option value="deadline-asc">Deadline (Nearest first)</option>
-                                                        <option value="deadline-desc">Deadline (Furthest first)</option>
-                                                        <option value="status">Status</option>
-                                                        <option value="name-asc">Name (A-Z)</option>
-                                                </select>
-                                        </div>
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Event Tasks</h2>
+                        <div class="d-flex align-items-center">
+                                <div class="me-3">
+                                        Showing <span class="fw-bold">{{ tasks|length }}</span> tasks
+                                </div>
+                                <div>
+                                        <label for="sort-tasks" class="me-2">Sort by:</label>
+                                        <select id="sort-tasks" class="form-select form-select-sm" style="width: auto; display: inline-block;">
+                                                <option value="deadline-asc">Deadline (Nearest first)</option>
+                                                <option value="deadline-desc">Deadline (Furthest first)</option>
+                                                <option value="status">Status</option>
+                                                <option value="name-asc">Name (A-Z)</option>
+                                        </select>
                                 </div>
                         </div>
+                </div>
 
-                        <!-- Filter Buttons -->
-                        <div class="filter-buttons">
-                                <button class="filter-btn all active" data-filter="all">All Tasks</button>
-                                <button class="filter-btn pending" data-filter="pending">Pending</button>
-                                <button class="filter-btn in-progress" data-filter="in-progress">In Progress</button>
-                                <button class="filter-btn completed" data-filter="completed">Completed</button>
-                                <button class="filter-btn cancelled" data-filter="cancelled">Cancelled</button>
-                        </div>
+                <div class="filter-buttons">
+                        <button class="btn btn-outline-primary filter-btn active" data-filter="all">All Tasks</button>
+                        <button class="btn btn-outline-warning filter-btn" data-filter="pending">Pending</button>
+                        <button class="btn btn-outline-info filter-btn" data-filter="in-progress">In Progress</button>
+                        <button class="btn btn-outline-success filter-btn" data-filter="completed">Completed</button>
+                </div>
 
-                        <!-- Tasks Grid -->
-                        {% if tasks|length > 0 %}
-                                <div class="tasks-grid" id="tasks-list">
-                                        {% for task in tasks %}
-                                                {% set status_class = 'pending' %}
-                                                {% set status_icon = 'bi-hourglass' %}
-                                                {% set status_text = 'Pending' %}
-
-                                                {% if task.statut == 'Completed' %}
-                                                        {% set status_class = 'completed' %}
-                                                        {% set status_icon = 'bi-check-circle-fill' %}
-                                                        {% set status_text = 'Completed' %}
-                                                {% elseif task.statut == 'In Progress' %}
-                                                        {% set status_class = 'in-progress' %}
-                                                        {% set status_icon = 'bi-play-circle-fill' %}
-                                                        {% set status_text = 'In Progress' %}
-                                                {% elseif task.statut == 'Cancelled' %}
-                                                        {% set status_class = 'cancelled' %}
-                                                        {% set status_icon = 'bi-x-circle-fill' %}
-                                                        {% set status_text = 'Cancelled' %}
-                                                {% endif %}
-
-                                                {% set days_remaining = date(task.deadline).diff(date('now')).days %}
-                                                {% if days_remaining < 0 and task.statut != 'Completed' and task.statut != 'Cancelled' %}
-                                                        {% set status_class = 'overdue' %}
-                                                        {% set status_icon = 'bi-exclamation-circle-fill' %}
-                                                        {% set status_text = 'Overdue' %}
-                                                {% endif %}
-
-                                                <div class="task-item" data-status="{{ task.statut|lower|replace({' ': '-'}) }}">
-                                                        <div class="task-card">
-                                                                <div class="task-header">
-                                                                        <h3 class="task-title">{{ task.nom }}</h3>
-                                                                        <span class="task-status {{ status_class }}">
-                                        <i class="bi {{ status_icon }}"></i> {{ status_text }}
-                                    </span>
-                                                                </div>
-                                                                <div class="task-content">
-                                                                        <div class="task-meta">
-                                        <span>
-                                            <i class="bi bi-calendar-event"></i>
-                                            Deadline: {{ task.deadline|date('d M Y') }}
-                                        </span>
-                                                                                {% if task.assignedTo is defined %}
-                                                                                        <span>
-                                            <i class="bi bi-person"></i>
-                                            {{ task.assignedTo }}
-                                        </span>
-                                                                                {% endif %}
+                {% if tasks|length > 0 %}
+                        <div class="row" id="tasks-list">
+                                {% for task in tasks %}
+                                        <div class="col-md-4 task-item" data-status="{{ task.statut|lower|replace({' ': '-'}) }}">
+                                                <div class="card">
+                                                        <div class="card-header">
+                                                                <h5 class="card-title">{{ task.nom }}</h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                                <div class="task-info">
+                                                                        <div class="task-row">
+                                                                                <div class="task-label">Category:</div>
+                                                                                <div class="task-value">{{ task.categorie }}</div>
+                                                                        </div>
+                                                                        <div class="task-row">
+                                                                                <div class="task-label">Start Date:</div>
+                                                                                <div class="task-value">{{ task.dateDebut ? task.dateDebut|date('d/m/Y') : 'N/A' }}</div>
+                                                                        </div>
+                                                                        <div class="task-row">
+                                                                                <div class="task-label">Deadline:</div>
+                                                                                <div class="task-value deadline-value">{{ task.deadline ? task.deadline|date('d/m/Y') : 'N/A' }}</div>
                                                                         </div>
 
-                                                                        {% if task.description is defined %}
-                                                                                <div class="task-description">
-                                                                                        {{ task.description }}
-                                                                                </div>
-                                                                        {% else %}
-                                                                                <div class="task-description">
-                                                                                        Task details not available.
-                                                                                </div>
-                                                                        {% endif %}
-
-                                                                        <div class="task-footer">
-                                                                                <div class="task-deadline-indicator">
-                                                                                        {% if task.statut != 'Completed' and task.statut != 'Cancelled' %}
-                                                                                                {% if days_remaining < 0 %}
-                                                                                                        <span class="deadline-badge overdue">
-                                                        {{ days_remaining|abs }} day{% if days_remaining != -1 %}s{% endif %} overdue
-                                                    </span>
-                                                                                                {% elseif days_remaining <= 3 %}
-                                                                                                        <span class="deadline-badge near">
-                                                        {{ days_remaining }} day{% if days_remaining != 1 %}s{% endif %} left
-                                                    </span>
-                                                                                                {% else %}
-                                                                                                        <span class="deadline-badge upcoming">
-                                                        {{ days_remaining }} days left
-                                                    </span>
-                                                                                                {% endif %}
-                                                                                        {% endif %}
-                                                                                </div>
-                                                                                <a href="#" class="task-action-btn">
-                                                                                        {% if task.statut == 'Completed' %}
-                                                                                                View Details
-                                                                                        {% elseif task.statut == 'Cancelled' %}
-                                                                                                View Details
-                                                                                        {% else %}
-                                                                                                Update Status
-                                                                                        {% endif %}
-                                                                                </a>
+                                                                        <div class="task-row">
+                                                                                <div class="task-label">Event:</div>
+                                                                                <div class="task-value">{{ task.event ? task.event.nom : 'N/A' }}</div>
                                                                         </div>
                                                                 </div>
                                                         </div>
+                                                        <div class="card-footer">
+                                                                {% if task.relation is null %}
+                                                                        <form action="{{ path('app_task_assign', {'id': task.id}) }}" method="post">
+                                                                                <input type="hidden" name="_token" value="{{ csrf_token('assign_task' ~ task.id) }}">
+                                                                                <button type="submit" class="btn btn-primary w-100">Choose this task</button>
+                                                                        </form>
+                                                                {% elseif task.relation.id == app.user.id %}
+                                                                        <div class="alert alert-success py-2 mb-0 text-center">
+                                                                                You are working on this task
+                                                                        </div>
+                                                                {% else %}
+                                                                        <div class="alert alert-secondary py-2 mb-0 text-center">
+                                                                                Assigned to {{ task.relation.nom }}
+                                                                        </div>
+                                                                {% endif %}
+                                                        </div>
                                                 </div>
-                                        {% endfor %}
-                                </div>
-                        {% else %}
-                                <div class="no-tasks">
-                                        <i class="bi bi-clipboard-x"></i>
-                                        <h3>No Tasks Found</h3>
-                                        <p>There are no tasks assigned for this event yet. Create a new task to get started with event planning.</p>
-                                        <a href="#" class="btn">Create a New Task</a>
-                                </div>
-                        {% endif %}
-                </div>
-        </section>
+                                        </div>
+                                {% endfor %}
+                        </div>
+                {% else %}
+                        <div class="text-center p-5 bg-light rounded">
+                                <i class="bi bi-clipboard-x fs-1 text-muted"></i>
+                                <h3 class="mt-3">No Tasks Found</h3>
+                                <p class="text-muted">There are no tasks assigned for this event yet.</p>
+                                <a href="#" class="btn btn-primary">Create a New Task</a>
+                        </div>
+                {% endif %}
+        </div>
 
-        <!-- Bootstrap JS Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-        <!-- Filter and Sort Script -->
         <script>
                 document.addEventListener('DOMContentLoaded', function() {
                         // Filter functionality
@@ -215,20 +204,20 @@
 
                                 tasks.sort((a, b) => {
                                         if (sortValue === 'deadline-asc') {
-                                                const dateA = a.querySelector('.task-meta span:first-child').textContent.trim();
-                                                const dateB = b.querySelector('.task-meta span:first-child').textContent.trim();
-                                                return new Date(dateA) - new Date(dateB);
+                                                const dateA = new Date(a.querySelector('.deadline-value').textContent.split('/').reverse().join('-'));
+                                                const dateB = new Date(b.querySelector('.deadline-value').textContent.split('/').reverse().join('-'));
+                                                return dateA - dateB;
                                         } else if (sortValue === 'deadline-desc') {
-                                                const dateA = a.querySelector('.task-meta span:first-child').textContent.trim();
-                                                const dateB = b.querySelector('.task-meta span:first-child').textContent.trim();
-                                                return new Date(dateB) - new Date(dateA);
+                                                const dateA = new Date(a.querySelector('.deadline-value').textContent.split('/').reverse().join('-'));
+                                                const dateB = new Date(b.querySelector('.deadline-value').textContent.split('/').reverse().join('-'));
+                                                return dateB - dateA;
                                         } else if (sortValue === 'status') {
                                                 const statusA = a.getAttribute('data-status');
                                                 const statusB = b.getAttribute('data-status');
                                                 return statusA.localeCompare(statusB);
                                         } else if (sortValue === 'name-asc') {
-                                                const nameA = a.querySelector('.task-title').textContent.trim();
-                                                const nameB = b.querySelector('.task-title').textContent.trim();
+                                                const nameA = a.querySelector('.card-title').textContent.trim();
+                                                const nameB = b.querySelector('.card-title').textContent.trim();
                                                 return nameA.localeCompare(nameB);
                                         }
                                         return 0;

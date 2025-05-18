@@ -126,9 +126,6 @@
                     <div class="events-header">
                         <h2>Liste des Événements</h2>
                         <div class="events-actions">
-                            <div class="events-count">
-                                Showing <span>{{ events|length }}</span> events
-                            </div>
                             <div class="events-sort">
                                 <label for="sort-events">Sort by:</label>
                                 <select id="sort-events">
@@ -137,6 +134,15 @@
                                     <option value="name-asc">Name (A-Z)</option>
                                 </select>
                             </div>
+                            <div class="sidebar-widget">
+                                <h3>Options</h3>
+                                <label class="filter-option">
+                                    <input type="checkbox" id="showPastEvents">
+                                    <span class="checkmark"></span>
+                                    <span>Show past events</span>
+                                </label>
+                            </div>
+
                         </div>
                     </div>
 
@@ -163,7 +169,7 @@
                                         <p>{{ event.description|default('Join us for this exciting event!')|length > 120 ? event.description|slice(0, 120) ~ '...' : event.description|default('Join us for this exciting event!') }}</p>
                                     </div>
                                    <div class="event-footer">
-                                        <a href="{{ path('app_event_tasks', {'id': event.id}) }}" class="event-details-link">Participate in organizing</a>
+                                      {% if app.user !=null and app.user.membershipStatus=='actif' %}  <a href="{{ path('app_event_tasks', {'id': event.id}) }}" class="event-details-link">Participate in organizing</a>{% endif %}
                                       <a href="{{ path('app_event_register', {'id': event.id}) }}" class="event-register-btn">Register Now</a>
                                   </div>
                                 </div>
@@ -209,3 +215,42 @@
     <script src="{{ asset('js/event.js') }}"></script>
 {% endblock %}
 {% include 'footer.html.twig' %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const checkbox = document.getElementById('showPastEvents');
+        const today = new Date().toISOString().split('T')[0];
+
+        function filterEvents() {
+            const showPast = checkbox.checked;
+            const events = document.querySelectorAll('.event-item');
+
+            events.forEach(event => {
+                const eventDate = event.getAttribute('data-date');
+                const card = event.closest('.event-card');
+                const footer = event.querySelector('.event-footer');
+
+                const isPast = eventDate < today;
+
+                // Affichage ou non de la carte de l'événement
+                if (!showPast && isPast) {
+                    card.style.display = 'none';
+                } else {
+                    card.style.display = 'block';
+                }
+
+                // Affichage du footer uniquement si événement futur
+                if (isPast) {
+                    footer.style.display = 'none';
+                } else {
+                    footer.style.display = 'flex'; // ou 'block' selon ton CSS
+                }
+            });
+        }
+
+        // Initialiser au chargement
+        filterEvents();
+
+        // Réagir au clic sur la case "Show past events"
+        checkbox.addEventListener('change', filterEvents);
+    });
+</script>

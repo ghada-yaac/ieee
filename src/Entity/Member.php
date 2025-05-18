@@ -66,6 +66,7 @@ class Member implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Task::class, mappedBy: 'relation')]
     private Collection $tasks;
 
+
     public function __construct()
     {
         $this->tasks = new ArrayCollection();
