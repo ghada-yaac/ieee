@@ -1,0 +1,449 @@
+
+:root {
+    --primary-color: #0056b3;
+    --primary-hover: #004494;
+    --primary-light: #f0f7ff;
+    --text-dark: #333;
+    --text-medium: #555;
+    --text-light: #666;
+    --border-color: #eee;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Hero Section - Matching events-hero */
+.tasks-hero {
+    background: linear-gradient(135deg, #0056b3 0%, #00a0e9 100%);
+    color: white;
+    padding: 50px 0;
+    text-align: center;
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.tasks-hero h1 {
+    font-size: 36px;
+    margin-bottom: 15px;
+    font-weight: 700;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.tasks-hero p {
+    font-size: 18px;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+    animation: fadeInUp 0.8s ease-out;
+}
+
+/* Breadcrumb - Matching events breadcrumb */
+.breadcrumb {
+    background-color: #f8f9fa;
+    padding: 15px 0;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.breadcrumb a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.breadcrumb a:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+.breadcrumb span {
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+/* Tasks Section - Matching events-section */
+.tasks-section {
+    padding: 40px 0 60px;
+    background-color: #f8f9fa;
+}
+
+/* Tasks Header - Matching events-header */
+.tasks-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.tasks-header h2 {
+    font-size: 24px;
+    color: var(--primary-color);
+    margin: 0;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.tasks-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    animation: fadeInDown 0.5s ease-out;
+}
+
+.tasks-count {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.tasks-count span {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Filter Buttons - Styled like event categories */
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.filter-btn {
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: white;
+    color: var(--text-dark);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.filter-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filter-btn.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.filter-btn.all {
+    background-color: #6c757d;
+    color: white;
+}
+
+.filter-btn.pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.filter-btn.in-progress {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.filter-btn.completed {
+    background-color: #28a745;
+    color: white;
+}
+
+.filter-btn.cancelled {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Tasks Grid - Matching events-grid */
+.tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+    animation: fadeIn 1s ease-out;
+}
+
+/* Task Card - Matching event-card */
+.task-card {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.task-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.task-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 15px 20px;
+    position: relative;
+}
+
+.task-title {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    padding-right: 80px;
+}
+
+.task-status {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.task-status.pending {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.task-status.in-progress {
+    background-color: #17a2b8;
+}
+
+.task-status.completed {
+    background-color: #28a745;
+}
+
+.task-status.cancelled {
+    background-color: #dc3545;
+}
+
+.task-status.overdue {
+    background-color: #dc3545;
+    animation: pulse 2s infinite;
+}
+
+.task-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.task-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.task-meta span {
+    display: flex;
+    align-items: center;
+}
+
+.task-meta i {
+    margin-right: 5px;
+    color: var(--primary-color);
+}
+
+.task-description {
+    margin-bottom: 20px;
+    color: var(--text-medium);
+    font-size: 15px;
+    line-height: 1.5;
+    flex-grow: 1;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+    border-top: 1px solid var(--border-color);
+    padding-top: 15px;
+}
+
+.task-deadline-indicator {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.deadline-badge {
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.deadline-badge.upcoming {
+    background-color: #e9f5ff;
+    color: var(--primary-color);
+}
+
+.deadline-badge.near {
+    background-color: #fff8e6;
+    color: #ff9800;
+}
+
+.deadline-badge.overdue {
+    background-color: #ffebee;
+    color: #dc3545;
+}
+
+.task-action-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: var(--primary-color);
+    color: white;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.task-action-btn:hover {
+    background-color: var(--primary-hover);
+    color: white;
+}
+
+/* No Tasks - Matching no-events */
+.no-tasks {
+    background-color: white;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 1s ease-out;
+}
+
+.no-tasks i {
+    font-size: 60px;
+    color: #ddd;
+    margin-bottom: 20px;
+}
+
+.no-tasks h3 {
+    font-size: 24px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+}
+
+.no-tasks p {
+    color: var(--text-light);
+    max-width: 500px;
+    margin: 0 auto 20px;
+}
+
+.no-tasks .btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+}
+
+.no-tasks .btn:hover {
+    background-color: var(--primary-hover);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+    .tasks-grid {
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+}
+
+@media (max-width: 992px) {
+    .tasks-hero h1 {
+        font-size: 32px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tasks-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tasks-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .tasks-actions {
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 576px) {
+    .tasks-hero h1 {
+        font-size: 28px;
+    }
+
+    .filter-buttons {
+        justify-content: center;
+    }
+
+}

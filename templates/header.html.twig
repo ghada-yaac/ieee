@@ -1,0 +1,27 @@
+<nav class="main-nav">
+    <div class="container">
+        <div class="logo">
+            <a href="{{ path('app_home') }}">
+                <img src="https://www.thetechedvocate.org/wp-content/uploads/2023/03/1-11.png" alt="IEEE Logo">
+            </a>
+        </div>
+        <div class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </div>
+        <ul class="nav-menu">
+            {% if app.user==null %} <li><a href="{{ path ('app_home') }}">Home</a></li>
+           {% else %}
+            <li><a href="{{ path('app_home_member') }}">About</a></li>
+            {% endif %}
+            <li><a href="{{ path('app_home_contact') }}">contact </a></li>
+            <li><a href={{ path('app_home_event') }}>Upcoming Events</a></li>
+            <li><a href="{{ path('app_home_officers') }}">Officers Communities</a></li>
+            {% if app.user!=null %}<li><a href="{{ path('app_logout') }}">logout</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">login</a></li>
+            {% endif %}
+            <li><a href="#" class="search-icon"><i class="fas fa-search"></i></a></li>
+            <li>{% block nav_extra %}{% endblock %}</li>
+        </ul>
+    </div>
+</nav>

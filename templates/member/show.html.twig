@@ -1,0 +1,152 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails du Membre - IEEE HUB{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .member-card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .member-header {
+            background-color: #0056b3;
+            color: white;
+            padding: 20px;
+        }
+        .member-body {
+            padding: 20px;
+        }
+        .member-info {
+            margin-bottom: 15px;
+        }
+        .member-label {
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .badge-active {
+            background-color: #28a745;
+        }
+        .badge-pending {
+            background-color: #ffc107;
+        }
+        .badge-inactive {
+            background-color: #dc3545;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/admin_header.html.twig' %}
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Détails du Membre</h1>
+            <div>
+                <a href="{{ path('member_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Retour à la liste
+                </a>
+                <a href="{{ path('member_edit', {'id': member.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Modifier
+                </a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div class="member-card">
+                    <div class="member-header">
+                        <h2>{{ member.nom }} {{ member.prenom }}</h2>
+                        <p class="mb-0">{{ member.memberID }}</p>
+                    </div>
+                    <div class="member-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="member-info">
+                                    <div class="member-label">Email</div>
+                                    <div>{{ member.email }}</div>
+                                </div>
+                                <div class="member-info">
+                                    <div class="member-label">Téléphone</div>
+                                    <div>{{ member.numTel }}</div>
+                                </div>
+                                <div class="member-info">
+                                    <div class="member-label">Rôles</div>
+                                    <div>
+                                        {% for role in member.roles %}
+                                            {% if role != 'ROLE_USER' %}
+                                                <span class="badge bg-secondary">{{ role|replace({'ROLE_': ''}) }}</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="member-info">
+                                    <div class="member-label">Statut d'adhésion</div>
+                                    <div>
+                                        <span class="badge badge-{{ member.membershipStatus }}">
+                                            {{ member.membershipStatus == 'active' ? 'Actif' : (member.membershipStatus == 'pending' ? 'En attente' : 'Inactif') }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="member-info">
+                                    <div class="member-label">Date de début d'adhésion</div>
+                                    <div>{{ member.membershipStartDate|date('d/m/Y') }}</div>
+                                </div>
+                                <div class="member-info">
+                                    <div class="member-label">Date de fin d'adhésion</div>
+                                    <div>{{ member.membershipEndDate|date('d/m/Y') }}</div>
+                                </div>
+                                <div class="member-info">
+                                    <div class="member-label">Points</div>
+                                    <div>{{ member.points }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if member.membershipStatus == 'pending' %}
+                            <div class="mt-4">
+                                <form method="post" action="{{ path('member_change_status', {'id': member.id}) }}">
+                                    <input type="hidden" name="status" value="active">
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-check"></i> Activer le membre
+                                    </button>
+                                </form>
+                            </div>
+                        {% endif %}
+
+                        <div class="mt-4">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <i class="fas fa-trash"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmation de suppression -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirmer la suppression</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Êtes-vous sûr de vouloir supprimer le membre {{ member.nom }} {{ member.prenom }} ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <form method="post" action="{{ path('member_delete', {'id': member.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ member.id) }}">
+                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,153 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/profil.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="profile-edit-container">
+            <h1 class="page-title">Modifier mon profil</h1>
+
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success">
+                    <i class="fas fa-check-circle"></i> {{ message }}
+                </div>
+            {% endfor %}
+
+            {% for message in app.flashes('error') %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> {{ message }}
+                </div>
+            {% endfor %}
+
+            {{ form_start(form, {'attr': {'class': 'profile-form'}}) }}
+            <div class="form-section">
+                <h3 class="section-title">Photo de profil</h3>
+
+                <div class="avatar-upload">
+                    <div class="current-avatar">
+
+                        <i class="fas fa-user"></i>
+                    </div>
+
+
+                </div>
+            </div>
+            <div class="form-section">
+                <h3 class="section-title">Informations personnelles</h3>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.prenom) }}
+                        {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.prenom) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.nom) }}
+                        {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.nom) }}
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.email) }}
+                        {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(form.numTel) }}
+                        {{ form_widget(form.numTel, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.numTel) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">Sécurité</h3>
+
+                <div class="form-group">
+                    {{ form_label(form.plainPassword) }}
+                    {{ form_widget(form.plainPassword, {'attr': {'class': 'form-control', 'data-password-field': 'true'}}) }}
+                    {{ form_errors(form.plainPassword) }}
+
+                    <div class="password-strength">
+                        <div class="strength-meter">
+                            <span id="strength-meter-bar"></span>
+                        </div>
+                        <div class="strength-text" id="strength-text">Force du mot de passe</div>
+                    </div>
+
+                    <div class="form-text">
+                        Laissez ce champ vide si vous ne souhaitez pas changer votre mot de passe.
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <div>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save"></i> Mettre à jour mon profil
+                    </button>
+                </div>
+
+                <div>
+                    <a href="{{ path('app_home_member') }}" class="btn btn-cancel">
+                        <i class="fas fa-times"></i> Annuler
+                    </a>
+                </div>
+            </div>
+
+            <div class="note">
+                <p><strong>Note :</strong> Vos informations personnelles sont protégées conformément à notre politique de confidentialité.</p>
+            </div>
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <script>
+        const passwordField = document.querySelector('[data-password-field="true"]');
+        if (passwordField) {
+            passwordField.addEventListener('input', function () {
+                const password = this.value;
+                const meterBar = document.getElementById('strength-meter-bar');
+                const strengthText = document.getElementById('strength-text');
+
+                meterBar.className = '';
+
+                if (password.length === 0) {
+                    strengthText.textContent = 'Force du mot de passe';
+                    return;
+                }
+
+                let strength = 0;
+                if (password.length >= 8) strength++;
+                if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength++;
+                if (/[0-9]/.test(password)) strength++;
+                if (/[^a-zA-Z0-9]/.test(password)) strength++;
+
+                if (strength === 1) {
+                    meterBar.className = 'strength-weak';
+                    strengthText.textContent = 'Faible';
+                } else if (strength === 2) {
+                    meterBar.className = 'strength-medium';
+                    strengthText.textContent = 'Moyen';
+                } else if (strength === 3) {
+                    meterBar.className = 'strength-strong';
+                    strengthText.textContent = 'Fort';
+                } else if (strength === 4) {
+                    meterBar.className = 'strength-very-strong';
+                    strengthText.textContent = 'Très fort';
+                }
+            });
+        }
+    </script>
+{% endblock %}
+
+{% include 'footer.html.twig' %}

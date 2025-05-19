@@ -1,0 +1,103 @@
+
+{% block title %}<title>Default Title</title>{% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/signup.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    {% endblock %}
+{% include 'header.html.twig' %}
+
+
+{% block body %}
+    <section class="auth-section">
+        <div class="container">
+            <div class="auth-container">
+                <div class="auth-content">
+                    <div class="auth-header">
+                        <h2>Create Your IEEE Account</h2>
+                        <p>Join the global community of technology professionals</p>
+                    </div>
+
+                    {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
+
+                    {{ form_errors(registrationForm) }}
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            {{ form_label(registrationForm.nom, 'First Name') }}
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                {{ form_widget(registrationForm.nom, {'attr': {'placeholder': 'Enter your first name'}}) }}
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            {{ form_label(registrationForm.prenom, 'Last Name') }}
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                {{ form_widget(registrationForm.prenom, {'attr': {'placeholder': 'Enter your last name'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.email, 'Email Address') }}
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            {{ form_widget(registrationForm.email, {'attr': {'placeholder': 'Enter your email'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.numTel, 'Phone Number') }}
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            {{ form_widget(registrationForm.numTel, {'attr': {'placeholder': 'Enter your phone number'}}) }}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_label(registrationForm.plainPassword, 'Password') }}
+                        <div class="input-with-icon">
+                            <i class="fas fa-lock"></i>
+                            {{ form_widget(registrationForm.plainPassword, {'attr': {'placeholder': 'Enter your password'}}) }}
+                        </div>
+                        {{ form_errors(registrationForm.plainPassword) }}
+                    </div>
+
+
+
+                    <div class="form-group">
+                        {{ form_widget(registrationForm.agreeTerms) }}
+                        {{ form_label(registrationForm.agreeTerms) }}
+                        {{ form_errors(registrationForm.agreeTerms) }}
+                    </div>
+
+                    <button type="submit" class="auth-button">Create Account</button>
+
+                    <div class="auth-footer">
+                        <p>Already have an account? <a href="{{ path('app_login') }}">login</a></p>
+                    </div>
+
+                    {{ form_end(registrationForm) }}
+                </div>
+
+                <div class="auth-image">
+                    <img src="https://via.placeholder.com/600x800?text=IEEE+Sign+Up" alt="IEEE Sign Up">
+                    <div class="auth-image-overlay">
+                        <h3>Join the IEEE Community</h3>
+                        <p>Connect with over 400,000 technology professionals worldwide and gain access to exclusive resources, networking opportunities, and career advancement tools.</p>
+                        <ul class="benefits-list">
+                            <li><i class="fas fa-check-circle"></i> Access to cutting-edge research</li>
+                            <li><i class="fas fa-check-circle"></i> Networking with industry experts</li>
+                            <li><i class="fas fa-check-circle"></i> Professional development resources</li>
+                            <li><i class="fas fa-check-circle"></i> Discounts on conferences and events</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+{% include 'footer.html.twig' %}

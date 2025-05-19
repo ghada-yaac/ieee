@@ -1,0 +1,210 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin - IEEE HUB{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <style>
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #0056b3;
+            color: white;
+            border-radius: 10px 10px 0 0 !important;
+            font-weight: bold;
+        }
+        .stat-card {
+            text-align: center;
+            padding: 20px;
+        }
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #0056b3;
+        }
+        .stat-label {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .chart-container {
+            height: 300px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {% include 'partials/admin_header.html.twig' %}
+
+    <div class="container mt-4">
+        <h1 class="mb-4">Dashboard Admin</h1>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body stat-card">
+                        <div class="stat-value">{{ totalMembers }}</div>
+                        <div class="stat-label">Membres Total</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body stat-card">
+                        <div class="stat-value">{{ activeMembers }}</div>
+                        <div class="stat-label">Membres Actifs</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body stat-card">
+                        <div class="stat-value">{{ totalEvents }}</div>
+                        <div class="stat-label">Événements Total</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body stat-card">
+                        <div class="stat-value">{{ upcomingEvents }}</div>
+                        <div class="stat-label">Événements à venir</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Membres par Rôle
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="membersByRoleChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        Événements par Catégorie
+                    </div>
+                    <div class="card-body">
+                        <div class="chart-container">
+                            <canvas id="eventsByCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Actions Rapides
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <a href="{{ path('member_index') }}" class="btn btn-primary w-100 mb-2">
+                                    <i class="fas fa-users"></i> Gérer les Membres
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{{ path('event_index') }}" class="btn btn-success w-100 mb-2">
+                                    <i class="fas fa-calendar-alt"></i> Gérer les Événements
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{{ path('event_new') }}" class="btn btn-info w-100 mb-2">
+                                    <i class="fas fa-plus-circle"></i> Nouvel Événement
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="{{ path('task_index') }}" class="btn btn-warning w-100 mb-2">
+                                    <i class="fas fa-tasks"></i> Gérer les Tâches
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Données pour le graphique des membres par rôle
+            const membersByRoleData = {{ membersByRole|raw }};
+            const membersByRoleCtx = document.getElementById('membersByRoleChart').getContext('2d');
+            new Chart(membersByRoleCtx, {
+                type: 'pie',
+                data: {
+                    labels: membersByRoleData.map(item => item.role),
+                    datasets: [{
+                        data: membersByRoleData.map(item => item.count),
+                        backgroundColor: [
+                            '#0056b3',
+                            '#00a8e8',
+                            '#007ea7',
+                            '#003459',
+                            '#00171f'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+
+            // Données pour le graphique des événements par catégorie
+            const eventsByCategoryData = {{ eventsByCategory|raw }};
+            const eventsByCategoryCtx = document.getElementById('eventsByCategoryChart').getContext('2d');
+            new Chart(eventsByCategoryCtx, {
+                type: 'bar',
+                data: {
+                    labels: eventsByCategoryData.map(item => item.category),
+                    datasets: [{
+                        label: 'Nombre d\'événements',
+                        data: eventsByCategoryData.map(item => item.count),
+                        backgroundColor: '#0056b3',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}

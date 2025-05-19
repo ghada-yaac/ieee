@@ -1,0 +1,32 @@
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #0056b3;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('admin_dashboard') }}">
+            <img src="https://www.marefa.org/w/images/thumb/2/21/IEEE_logo.svg/2560px-IEEE_logo.svg.png" alt="IEEE Logo" height="40">
+            IEEE HUB Admin
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link {{ app.request.get('_route') starts with 'admin_dashboard' ? 'active' : '' }}" href="{{ path('admin_dashboard') }}">Dashboard</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ app.request.get('_route') starts with 'member_' ? 'active' : '' }}" href="{{ path('member_index') }}">Gestion des Membres</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ app.request.get('_route') starts with 'event_' ? 'active' : '' }}" href="{{ path('event_index') }}">Gestion des Événements</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ app.request.get('_route') starts with 'task_' and app.request.get('_route') != 'task_new_for_event' ? 'active' : '' }}" href="{{ path('task_index') }}">Gestion des Tâches</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

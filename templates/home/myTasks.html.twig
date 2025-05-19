@@ -1,0 +1,340 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/tasks.css') }}">
+{% endblock %}
+
+{% include 'header.html.twig' %}
+
+{% block body %}
+    <div class="page-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h1 class="display-6 mb-0">Mes Tâches</h1>
+                    <p class="text-white-50 mb-0">Gérez et suivez vos tâches assignées</p>
+                </div>
+                <div>
+                    <button class="btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#taskFilters" aria-expanded="false" aria-controls="taskFilters">
+                        <i class="fas fa-filter me-2"></i> Filtres
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <div class="collapse mb-4" id="taskFilters">
+            <div class="card card-body">
+                <div class="row">
+                    <div class="col-md-4 mb-3 mb-md-0">
+                        <label for="filter-status" class="form-label">Statut</label>
+                        <select class="form-select" id="filter-status">
+                            <option value="all">Tous les statuts</option>
+                            <option value="in-progress">In progress</option>
+                            <option value="completed">Terminé</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label for="filter-deadline" class="form-label">Deadline</label>
+                        <select class="form-select" id="filter-deadline">
+                            <option value="all">Toutes les deadlines</option>
+                            <option value="today">Aujourd'hui</option>
+                            <option value="week">Cette semaine</option>
+                            <option value="month">Ce mois</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if tasks is empty %}
+            <div class="empty-state">
+                <i class="fas fa-clipboard-list"></i>
+                <h3>Aucune tâche assignée</h3>
+                <p>Vous n'avez actuellement aucune tâche assignée. Les tâches qui vous seront attribuées apparaîtront ici.</p>
+                <a href="{{ path('app_home_event') }}" class="btn btn-primary">
+                    <i class="fas fa-search me-2"></i> Parcourir les événements
+                </a>
+            </div>
+        {% else %}
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="task-summary">
+                    <span class="badge bg-primary rounded-pill">{{ tasks|length }} tâche(s)</span>
+                    {% set completedCount = tasks|filter(t => t.statut == 'completed')|length %}
+                    {% set completionRate = (completedCount / tasks|length) * 100 %}
+                    <span class="ms-2 text-muted">{{ completionRate|round }}% terminées</span>
+                </div>
+                <div class="task-sort">
+                    <select class="form-select form-select-sm" id="sort-tasks">
+                        <option value="deadline-asc">Deadline (+ proche)</option>
+                        <option value="deadline-desc">Deadline (+ éloignée)</option>
+                        <option value="name-asc">Nom (A-Z)</option>
+                        <option value="status">Statut</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="card task-card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Liste des tâches</h5>
+                        <div class="task-view-toggle">
+                            <div class="btn-group btn-group-sm" role="group">
+                                <button type="button" class="btn btn-outline-primary active" id="view-list">
+                                    <i class="fas fa-list"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-primary" id="view-grid">
+                                    <i class="fas fa-th"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul class="list-group list-group-flush" id="task-list">
+                    {% for task in tasks %}
+                        {% set statusClass = task.statut|lower|replace({' ': '-'}) %}
+                        <li class="list-group-item task-item {{ statusClass }}" data-status="{{ statusClass }}" data-category="{{ task.categorie }}" data-name="{{ task.nom }}">
+                            <div class="task-info">
+                                <div class="task-title">
+                                    <span>{{ task.nom }}</span>
+                                    <span class="badge badge-{{ statusClass }} ms-2">{{ task.statut }}</span>
+                                </div>
+
+                                <div class="progress task-progress">
+                                    {% if task.statut == 'in-progress' %}
+                                        <div class="progress-bar progress-in-progress" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    {% elseif task.statut == 'completed' %}
+                                        <div class="progress-bar progress-completed" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                                    {% endif %}
+                                </div>
+
+                                <div class="task-meta">
+                                    <div class="task-meta-item">
+                                        <i class="fas fa-tag"></i>
+                                        <span>{{ task.categorie }}</span>
+                                    </div>
+                                    <div class="task-meta-item">
+                                        <i class="fas fa-calendar-alt"></i>
+                                        <span>Début: {{ task.dateDebut|date('d/m/Y') }}</span>
+                                    </div>
+                                    <div class="task-meta-item {% if task.deadline|date('U') < 'now'|date('U') and task.statut != 'completed' %}deadline-warning{% endif %}">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Deadline: {{ task.deadline|date('d/m/Y') }}</span>
+                                        {% if task.deadline|date('U') < 'now'|date('U') and task.statut != 'completed' %}
+                                            <span class="badge bg-danger ms-2">En retard</span>
+                                        {% endif %}
+                                    </div>
+
+                                    {% set daysLeft = (task.deadline|date('U') - 'now'|date('U')) / 86400 %}
+                                    {% if daysLeft > 0 and task.statut != 'completed' and task.statut != 'cancelled' %}
+                                        <div class="task-meta-item">
+                                            <i class="fas fa-hourglass-half"></i>
+                                            <span>{{ daysLeft|round }} jour(s) restant(s)</span>
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="task-actions">
+                                {% if task.statut != 'completed' and task.statut != 'cancelled' %}
+                                    <form action="{{ path('app_task_complete', {'id': task.id}) }}" method="post">
+                                        <button type="submit" class="btn btn-complete btn-sm" title="Marquer comme terminé">
+                                            <i class="fas fa-check me-1"></i> Terminer
+                                        </button>
+                                    </form>
+                                {% endif %}
+                                <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#taskModal{{ task.id }}">
+                                    <i class="fas fa-eye me-1"></i> Détails
+                                </button>
+                            </div>
+                        </li>
+
+                        <!-- Task Detail Modal -->
+                        <div class="modal fade" id="taskModal{{ task.id }}" tabindex="-1" aria-labelledby="taskModalLabel{{ task.id }}" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="taskModalLabel{{ task.id }}">{{ task.nom }}</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <span class="badge badge-{{ statusClass }}">{{ task.statut }}</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <h6>Détails de la tâche</h6>
+                                            <table class="table table-sm">
+                                                <tbody>
+                                                <tr>
+                                                    <th scope="row">Catégorie</th>
+                                                    <td>{{ task.categorie }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Date de début</th>
+                                                    <td>{{ task.dateDebut|date('d/m/Y') }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th scope="row">Deadline</th>
+                                                    <td class="{% if task.deadline|date('U') < 'now'|date('U') and task.statut != 'completed' %}text-danger{% endif %}">
+                                                        {{ task.deadline|date('d/m/Y') }}
+                                                    </td>
+                                                </tr>
+                                                {% if task.event %}
+                                                    <tr>
+                                                        <th scope="row">Événement</th>
+                                                        <td>{{ task.event.nom }}</td>
+                                                    </tr>
+                                                {% endif %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        {% if task.statut != 'completed' and task.statut != 'cancelled' %}
+                                            <form action="{{ path('app_task_complete', {'id': task.id}) }}" method="post">
+                                                <button type="submit" class="btn btn-success">
+                                                    <i class="fas fa-check me-1"></i> Marquer comme terminé
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter tasks by status
+            const filterStatus = document.getElementById('filter-status');
+            const filterDeadline = document.getElementById('filter-deadline');
+            const sortSelect = document.getElementById('sort-tasks');
+            const taskItems = document.querySelectorAll('.task-item');
+            const viewListBtn = document.getElementById('view-list');
+            const viewGridBtn = document.getElementById('view-grid');
+            const taskList = document.getElementById('task-list');
+
+            // Apply filters function
+            function applyFilters() {
+                const statusFilter = filterStatus ? filterStatus.value : 'all';
+                const deadlineFilter = filterDeadline ? filterDeadline.value : 'all';
+
+                taskItems.forEach(item => {
+                    const status = item.getAttribute('data-status');
+                    const deadlineText = item.querySelector('.task-meta-item:nth-child(3) span').textContent;
+                    const deadlineDate = new Date(deadlineText.split(': ')[1].split('/').reverse().join('-'));
+
+                    const today = new Date();
+                    const weekEnd = new Date();
+                    weekEnd.setDate(today.getDate() + 7);
+                    const monthEnd = new Date();
+                    monthEnd.setMonth(today.getMonth() + 1);
+
+                    let showByStatus = statusFilter === 'all' || status === statusFilter;
+                    let showByDeadline = true;
+
+                    if (deadlineFilter === 'today') {
+                        showByDeadline = deadlineDate.toDateString() === today.toDateString();
+                    } else if (deadlineFilter === 'week') {
+                        showByDeadline = deadlineDate >= today && deadlineDate <= weekEnd;
+                    } else if (deadlineFilter === 'month') {
+                        showByDeadline = deadlineDate >= today && deadlineDate <= monthEnd;
+                    }
+
+                    if (showByStatus  && showByDeadline) {
+                        item.style.display = '';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            }
+
+            // Sort tasks function
+            function sortTasks() {
+                const sortValue = sortSelect ? sortSelect.value : 'deadline-asc';
+                const tasks = Array.from(taskItems);
+
+                tasks.sort((a, b) => {
+                    if (sortValue === 'deadline-asc' || sortValue === 'deadline-desc') {
+                        const dateA = new Date(a.querySelector('.task-meta-item:nth-child(3) span').textContent.split(': ')[1].split('/').reverse().join('-'));
+                        const dateB = new Date(b.querySelector('.task-meta-item:nth-child(3) span').textContent.split(': ')[1].split('/').reverse().join('-'));
+
+                        return sortValue === 'deadline-asc' ? dateA - dateB : dateB - dateA;
+                    } else if (sortValue === 'name-asc') {
+                        const nameA = a.querySelector('.task-title span').textContent.trim();
+                        const nameB = b.querySelector('.task-title span').textContent.trim();
+
+                        return nameA.localeCompare(nameB);
+                    } else if (sortValue === 'status') {
+                        const statusOrder = { 'pending': 1, 'in-progress': 2, 'completed': 3, 'cancelled': 4 };
+                        const statusA = a.getAttribute('data-status');
+                        const statusB = b.getAttribute('data-status');
+
+                        return statusOrder[statusA] - statusOrder[statusB];
+                    }
+                    return 0;
+                });
+
+                // Reorder DOM elements
+                tasks.forEach(task => {
+                    taskList.appendChild(task);
+                });
+            }
+
+            // Toggle view function
+            function toggleView(viewType) {
+                if (viewType === 'grid') {
+                    taskList.classList.add('row');
+                    taskItems.forEach(item => {
+                        item.classList.add('col-md-6', 'col-lg-4', 'mb-3');
+                        item.style.display = item.style.display === 'none' ? 'none' : 'block';
+                    });
+                    viewListBtn.classList.remove('active');
+                    viewGridBtn.classList.add('active');
+                } else {
+                    taskList.classList.remove('row');
+                    taskItems.forEach(item => {
+                        item.classList.remove('col-md-6', 'col-lg-4', 'mb-3');
+                        item.style.display = item.style.display === 'none' ? 'none' : 'flex';
+                    });
+                    viewListBtn.classList.add('active');
+                    viewGridBtn.classList.remove('active');
+                }
+            }
+
+            // Add event listeners
+            if (filterStatus) {
+                filterStatus.addEventListener('change', applyFilters);
+            }
+
+
+
+            if (filterDeadline) {
+                filterDeadline.addEventListener('change', applyFilters);
+            }
+
+            if (sortSelect) {
+                sortSelect.addEventListener('change', sortTasks);
+            }
+
+            if (viewListBtn && viewGridBtn) {
+                viewListBtn.addEventListener('click', () => toggleView('list'));
+                viewGridBtn.addEventListener('click', () => toggleView('grid'));
+            }
+
+            // Initialize
+            sortTasks();
+        });
+    </script>
+{% endblock %}
+
+{% include 'footer.html.twig' %}
