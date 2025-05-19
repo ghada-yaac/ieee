@@ -1,0 +1,212 @@
+{% block title %}<title>Default Title</title>{% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/officers.css') }}">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    {% endblock %}
+
+{% include 'header.html.twig' %}
+{% block body %}
+    <div class="container py-5">
+        <!-- En-tête de la page -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h1 class="text-primary fw-bold">OUR TEAM</h1>
+                <p class="lead">Meet our officers team who are currently leading IEEE ISET-RADES SB</p>
+            </div>
+        </div>
+
+        <!-- Section Bureau SB -->
+        <div class="officers-section mb-5">
+            <div class="section-header">
+                <h2 class="text-primary"> Student Branch</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="officers-container">
+                <!-- Membre 1 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="https://www.facebook.com/photo/?fbid=1103533154862387&set=a.100426928506353" alt="Président SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Yasar Cerci</h3>
+                        <span class="officer-position">Chai</span>
+                        <a href="mailto:yasarcerci@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> yasarcerci@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 2 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/sb-vice.jpg') }}" alt="Vice-Président SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Sarah Saidani</h3>
+                        <span class="officer-position">Vice Chair</span>
+                        <a href="mailto:sarahsaidani@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> sarahsaidani@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 3 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/sb-secretary.jpg') }}" alt="Secrétaire SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Abir Annabi</h3>
+                        <span class="officer-position">Secretary</span>
+                        <a href="mailto:abirannabi@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> abirannabi@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 4 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/sb-treasurer.jpg') }}" alt="Trésorier SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Amine Kilani</h3>
+                        <span class="officer-position">Treasurer</span>
+                        <a href="mailto:aminekilani@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> aminekilani@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 5 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/sb-webmaster.jpg') }}" alt="Webmaster SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Hamza Belaaj</h3>
+                        <span class="officer-position">Webmaster</span>
+                        <a href="mailto: hamzabelaaj@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> hamzabelaaj@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 6 SB -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/sb-media.jpg') }}" alt="Responsable Média SB">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Ghofrane Sebtaoui</h3>
+                        <span class="officer-position">Media manager</span>
+                        <a href="mailto:ghofranesebtaoui@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> ghofranesebtaoui@ieee.org
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Bureau WIE -->
+        <div class="officers-section mb-5">
+            <div class="section-header">
+                <h2 class="text-primary">Women in Engineering</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="officers-container officers-container-small">
+                <!-- Membre 1 WIE -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/wie-chair.jpg') }}" alt="Présidente WIE">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Rahma Sassi</h3>
+                        <span class="officer-position">Chair WIE</span>
+                        <a href="mailto:rahmasassi@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> rahamsassi@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 2 WIE -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/wie-vice.jpg') }}" alt="Vice-Présidente WIE">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Ghada Yacoubi</h3>
+                        <span class="officer-position">Vice Chair WIE</span>
+                        <a href="mailto:ghadayacoubi@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> ghadayacoubi@ieee.org
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section Bureau CS -->
+        <div class="officers-section">
+            <div class="section-header">
+                <h2 class="text-primary">Computer Society</h2>
+                <div class="section-line"></div>
+            </div>
+
+            <div class="officers-container officers-container-small">
+                <!-- Membre 1 CS -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/cs-chair.jpg') }}" alt="Président CS">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Youssef Hammi</h3>
+                        <span class="officer-position">Chair CS</span>
+                        <a href="mailto:youssefhammi@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> youssefhammi@ieee.org
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Membre 2 CS -->
+                <div class="officer-circle">
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="{{ asset('images/officers/cs-vice.jpg') }}" alt="Vice-Président CS">
+                        </div>
+                    </div>
+                    <div class="officer-details">
+                        <h3>Salsabil Khammassi</h3>
+                        <span class="officer-position">Vice Chair CS</span>
+                        <a href="mailto:salsbilkhammassi@ieee.org" class="officer-email">
+                            <i class="fas fa-envelope"></i> salsabilkhammassi@ieee.org
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% include 'footer.html.twig' %}

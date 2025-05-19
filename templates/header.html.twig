@@ -1,7 +1,7 @@
 <nav class="main-nav">
     <div class="container">
         <div class="logo">
-            <a href="index.html">
+            <a href="{{ path('app_home') }}">
                 <img src="https://www.thetechedvocate.org/wp-content/uploads/2023/03/1-11.png" alt="IEEE Logo">
             </a>
         </div>
@@ -9,9 +9,10 @@
             <i class="fas fa-bars"></i>
         </div>
         <ul class="nav-menu">
-            <li><a href="#">contact </a></li>
+            <li><a href="{{ path ('app_home') }}">Home</a></li>
+            <li><a href="{{ path('app_home_contact') }}">contact </a></li>
             <li><a href={{ path('app_home_event') }}>Upcoming Events</a></li>
-            <li><a href="#">Officers Communities</a></li>
+            <li><a href="{{ path('app_home_officers') }}">Officers Communities</a></li>
 
             <li><a href="#" class="search-icon"><i class="fas fa-search"></i></a></li>
             <li>{% block nav_extra %}{% endblock %}</li>

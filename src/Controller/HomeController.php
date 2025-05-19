@@ -23,6 +23,11 @@ final class HomeController extends AbstractController
             'controller_name' => 'HomeController',
         ]);
     }
+    #[Route('/home/officers', name: 'app_home_officers')]
+    public function officers(): Response
+    {
+        return $this->render('home/officers.html.twig');
+    }
 
     #[Route('/', name: 'app_home')]
     public function index(): Response
@@ -72,6 +77,13 @@ final class HomeController extends AbstractController
             'user' => $user,
             'taskCount' => $taskCount,
         ]);
+    }
+    #[Route('/home/contact', name: 'app_home_contact')]
+    public function contact(): Response
+    {
+
+        return $this->render('home/contact.html.twig'
+        );
     }
     #[Route('/home/event', name: 'app_home_event')]
     public function event(EventRepository $eventRepository): Response
