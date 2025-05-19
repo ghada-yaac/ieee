@@ -2,10 +2,11 @@
 
 namespace App\Controller;
 use App\Entity\Event;
-
+use App\Entity\Participant;
 use App\Entity\Task;
 use App\Form\MemberEditType;
 use App\Repository\EventRepository;
+use App\Repository\ParticipantRepository;
 use App\Repository\TaskRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,14 +69,19 @@ final class HomeController extends AbstractController
     }
 
     #[Route('/home/member', name: 'app_home_member')]
-    public function home(TaskRepository $taskRepository): Response
+    public function home(TaskRepository $taskRepository, ParticipantRepository $participantRepository): Response
     {
         $user = $this->getUser();
 
         $taskCount = $taskRepository->count(['relation' => $user]);
+        $eventCount = 0;
+        if ($user && $user->getMemberID()) {
+            $eventCount = $participantRepository->countEventsByMemberId($user->getMemberID());
+        }
         return $this->render('home/acceuil.html.twig', [
             'user' => $user,
             'taskCount' => $taskCount,
+            'eventCount' => $eventCount,
         ]);
     }
     #[Route('/home/contact', name: 'app_home_contact')]
@@ -185,6 +191,75 @@ final class HomeController extends AbstractController
 
         return $this->redirectToRoute('app_home_member');
     }
+    #[Route('/event/{id}/confirm/register', name: 'app_confirm_register', methods: ['GET', 'POST'])]
+    public function confirmregister(int $id, Request $request, EntityManagerInterface $em): Response
+    {
+        // Récupérer l'événement
+        $event = $em->getRepository(Event::class)->find($id);
+        if (!$event) {
+            throw $this->createNotFoundException('Event not found');
+        }
+
+        if ($request->isMethod('POST')) {
+            // Récupérer les données du formulaire
+            $nom = $request->request->get('full_name');
+            $email = $request->request->get('email');
+            $memberId = $request->request->get('student_id'); // nullable
+
+            // Vérifier si un participant avec ce mail est déjà inscrit à cet événement
+            $existingParticipant = $em->getRepository(Participant::class)->findOneBy([
+                'event_id' => $event->getId(),
+                'email' => $email,
+            ]);
+
+            if ($existingParticipant) {
+                $this->addFlash('error', 'This email is already registered for this event.');
+
+                return $this->render('home/register.html.twig', [
+                    'event' => $event,
+                ]);
+            }
+
+            // Sinon on crée un nouveau Participant
+            $participant = new Participant();
+            $participant->setEventId($event->getId());
+            $participant->setNom($nom);
+            $participant->setEmail($email);
+            $participant->setMemberId($memberId ? (int)$memberId : null);
+            $user = $this->getUser();
+            $user->setPoints($user->getPoints() + 10);
+            $em->persist($participant);
+            $em->flush();
+
+            $this->addFlash('success', 'Registration successful!');
+
+            return $this->redirectToRoute('app_home_event');
+        }
+
+        return $this->render('home/register.html.twig', [
+            'event' => $event,
+        ]);
+    }
+    #[Route('/home/my-events', name: 'app_home_my_events')]
+    public function myEvents(ParticipantRepository $participantRepository): Response
+    {
+        /** @var \App\Entity\Member $user */
+        $user = $this->getUser();
+
+        if (!$user || !$user->getMemberID()) {
+            $this->addFlash('warning', 'You must be logged in as a member to view your events.');
+            return $this->redirectToRoute('app_home_member');
+        }
+
+        // Récupère les événements auxquels l'utilisateur a participé
+        $events = $participantRepository->findEventsByMemberId($user->getMemberID());
+
+        return $this->render('home/myEvents.html.twig', [
+            'events' => $events,
+        ]);
+    }
+
+
 
 
 }

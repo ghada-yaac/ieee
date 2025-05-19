@@ -121,6 +121,15 @@
 {% include 'header.html.twig' %}
 
 {% block body %}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label == 'error' ? 'danger' : label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <!-- Breadcrumb -->
     <div class="breadcrumb-section">
         <div class="container">
@@ -163,21 +172,41 @@
                         <!-- Registration Form -->
                         <div class="form-container">
                             {% if event.nbrPersonne > 0 %}
-                                <form id="registration-form" action="{{ path('app_event_register', {'id': event.id}) }}" method="post" class="needs-validation" novalidate>
-                                    <div class="mb-3">
-                                        <label for="full-name" class="form-label">Full Name</label>
-                                        <input type="text" class="form-control" id="full-name" name="full_name" value="{{ app.user.prenom }} {{ app.user.nom }}" required readonly>
-                                    </div>
+                                <form id="registration-form" action="{{ path('app_confirm_register', {'id': event.id}) }}" method="post" class="needs-validation" novalidate>
+                                    {% if app.user %}
+                                        <!-- Champs cachés préremplis -->
+                                        <input type="hidden" name="full_name" value="{{ app.user.prenom }} {{ app.user.nom }}">
+                                        <input type="hidden" name="email" value="{{ app.user.email }}">
+                                        <input type="hidden" name="student_id" value="{{ app.user.memberID }}">
 
-                                    <div class="mb-3">
-                                        <label for="email" class="form-label">Email</label>
-                                        <input type="email" class="form-control" id="email" name="email" value="{{ app.user.email }}" required readonly>
-                                    </div>
+                                        <!-- Optionnel : afficher les infos en readonly pour confirmation -->
+                                        <div class="mb-3">
+                                            <label class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" value="{{ app.user.prenom }} {{ app.user.nom }}" readonly>
+                                        </div>
 
-                                    <div class="mb-3">
-                                        <label for="student-id" class="form-label">Member ID</label>
-                                        <input type="text" class="form-control" id="student-id" name="student_id" value="{{ app.user.memberID }}" required readonly>
-                                    </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Email</label>
+                                            <input type="email" class="form-control" value="{{ app.user.email }}" readonly>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <input type="text" class="form-control" value="{{ app.user.memberID }}" hidden>
+                                        </div>
+
+                                    {% else %}
+                                        <!-- Champs vides à remplir par l'utilisateur -->
+                                        <div class="mb-3">
+                                            <label for="full-name" class="form-label">Full Name</label>
+                                            <input type="text" class="form-control" id="full-name" name="full_name" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="email" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email" required>
+                                        </div>
+
+                                    {% endif %}
 
                                     <div class="mb-3">
                                         <label for="special-requirements" class="form-label">Comments (Optional)</label>

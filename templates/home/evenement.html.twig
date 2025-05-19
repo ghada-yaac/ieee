@@ -169,9 +169,15 @@
                                         <p>{{ event.description|default('Join us for this exciting event!')|length > 120 ? event.description|slice(0, 120) ~ '...' : event.description|default('Join us for this exciting event!') }}</p>
                                     </div>
                                    <div class="event-footer">
-                                      {% if app.user !=null and app.user.membershipStatus=='actif' %}  <a href="{{ path('app_event_tasks', {'id': event.id}) }}" class="event-details-link">Participate in organizing</a>{% endif %}
-                                      <a href="{{ path('app_event_register', {'id': event.id}) }}" class="event-register-btn">Register Now</a>
-                                  </div>
+                                      {% if app.user !=null and app.user.membershipStatus=='actif' and event.categorie!='Networking'%}  <a href="{{ path('app_event_tasks', {'id': event.id}) }}" class="event-details-link">Participate in organizing</a>{% endif %}
+                                       {% if event.isAccesNonMembre or app.user %}
+                                           <a href="{{ path('app_event_register', {'id': event.id}) }}" class="event-register-btn">Register Now</a>
+                                       {% else %}
+
+                                           <p class="member-only-note">Only members can register for this event.</p>
+                                       {% endif %}
+
+                                   </div>
                                 </div>
                                 </div>
                             </div>

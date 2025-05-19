@@ -73,6 +73,12 @@
     text-decoration: none;
     transition: color 0.3s;
 }
+.member-only-note {
+    color: #ff4444;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
 
 .breadcrumb a:hover {
     color: #004494;

@@ -15,6 +15,28 @@ class ParticipantRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Participant::class);
     }
+    public function countEventsByMemberId(int $memberId): int
+    {
+        return $this->createQueryBuilder('p')
+            ->select('COUNT(DISTINCT p.event_id)')
+            ->andWhere('p.member_id = :memberId')
+            ->setParameter('memberId', $memberId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+    public function findEventsByMemberId(int $memberId): array
+    {
+        $entityManager = $this->getEntityManager();
+
+        return $entityManager->createQuery(
+            'SELECT e
+         FROM App\Entity\Event e
+         JOIN App\Entity\Participant p WITH p.event_id = e.id
+         WHERE p.member_id = :memberId'
+        )
+            ->setParameter('memberId', $memberId)
+            ->getResult();
+    }
 
     //    /**
     //     * @return Participant[] Returns an array of Participant objects

@@ -1,0 +1,162 @@
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('css/acceuil.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/myEvent.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/tasks.css') }}">
+{% endblock %}
+
+{% include 'header.html.twig' %}
+{% block body %}
+    <div class="container py-5">
+        <!-- En-tête de la page -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="text-primary fw-bold">Mes Événements</h1>
+                <p class="lead">Consultez les événements auxquels vous êtes inscrit</p>
+            </div>
+        </div>
+
+        <!-- Filtres et recherche -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <div class="input-group">
+                <span class="input-group-text bg-primary text-white">
+                    <i class="fas fa-search"></i>
+                </span>
+                    <input type="text" class="form-control" id="searchEvent" placeholder="Rechercher un événement...">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="d-flex gap-2 justify-content-md-end">
+                    <select class="form-select w-auto" id="filterCategory">
+                        <option value="">Toutes les catégories</option>
+                        <option value="Workshop">Workshop</option>
+                        <option value="Conférence">Conférence</option>
+                        <option value="Formation">Formation</option>
+                        <option value="Compétition">Compétition</option>
+                    </select>
+                    <select class="form-select w-auto" id="filterDate">
+                        <option value="">Toutes les dates</option>
+                        <option value="upcoming">À venir</option>
+                        <option value="past">Passés</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Liste des événements -->
+        <div class="events-container">
+            {% if events is empty %}
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-calendar-times"></i>
+                    </div>
+                    <h3>Aucun événement</h3>
+                    <p>Vous n'êtes inscrit à aucun événement pour le moment.</p>
+{#                    <a href="{{ path('events_list') }}" class="btn btn-primary">#}
+{#                        <i class="fas fa-calendar-plus me-2"></i>Découvrir les événements#}
+{#                    </a>#}
+                </div>
+            {% else %}
+                {% for event in events %}
+                    <div class="event-card" data-category="{{ event.categorie }}">
+                        <div class="event-date">
+                            <div class="date-month">{{ event.date|date('M') }}</div>
+                            <div class="date-day">{{ event.date|date('d') }}</div>
+                        </div>
+                        <div class="event-content">
+                            <div class="event-header">
+                                <h3 class="event-title">{{ event.nom }}</h3>
+                                <span class="event-category">{{ event.categorie }}</span>
+                            </div>
+                            <div class="event-details">
+                                <div class="event-info">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>{{ event.location }}</span>
+                                </div>
+                                <div class="event-info">
+                                    <i class="fas fa-clock"></i>
+                                    <span>{{ event.date|date('H:i') }}</span>
+                                </div>
+                                {% if event.prix > 0 %}
+                                    <div class="event-info">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <span>{{ event.prix }} TND</span>
+                                    </div>
+                                {% else %}
+                                    <div class="event-info">
+                                        <i class="fas fa-ticket-alt"></i>
+                                        <span>Gratuit</span>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="event-actions">
+{#                                <a href="{{ path('event_details', {'id': event.id}) }}" class="btn btn-sm btn-outline-primary">#}
+{#                                    <i class="fas fa-info-circle me-1"></i>Détails#}
+{#                                </a>#}
+                                {% if event.date > "now"|date('Y-m-d') %}
+{#                                    <a href="{{ path('event_cancel_registration', {'id': event.id}) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Êtes-vous sûr de vouloir annuler votre inscription ?')">#}
+{#                                        <i class="fas fa-times-circle me-1"></i>Annuler#}
+{#                                    </a>#}
+                                {% else %}
+                                    <span class="badge bg-secondary">Événement passé</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="event-status">
+                            {% if event.date < "now"|date('Y-m-d') %}
+                                <span class="status-badge past">Passé</span>
+                            {% elseif event.date == "now"|date('Y-m-d') %}
+                                <span class="status-badge today">Aujourd'hui</span>
+                            {% else %}
+                                <span class="status-badge upcoming">À venir</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+
+    </div>
+
+    <!-- JavaScript pour les filtres -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchEvent');
+            const categoryFilter = document.getElementById('filterCategory');
+            const dateFilter = document.getElementById('filterDate');
+            const eventCards = document.querySelectorAll('.event-card');
+
+            function filterEvents() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const categoryValue = categoryFilter.value;
+                const dateValue = dateFilter.value;
+                const currentDate = new Date().toISOString().split('T')[0];
+
+                eventCards.forEach(card => {
+                    const title = card.querySelector('.event-title').textContent.toLowerCase();
+                    const category = card.dataset.category;
+                    const eventDate = card.querySelector('.event-status .status-badge').classList.contains('upcoming') ? 'upcoming' : 'past';
+
+                    let showBySearch = title.includes(searchTerm);
+                    let showByCategory = categoryValue === '' || category === categoryValue;
+                    let showByDate = dateValue === '' || eventDate === dateValue;
+
+                    if (showBySearch && showByCategory && showByDate) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterEvents);
+            categoryFilter.addEventListener('change', filterEvents);
+            dateFilter.addEventListener('change', filterEvents);
+        });
+    </script>
+{% endblock %}
+{% include 'footer.html.twig' %}
